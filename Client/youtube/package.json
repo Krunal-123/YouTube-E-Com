@@ -1,7 +1,7 @@
 {
   "name": "youtube",
   "homepage": "https://Krunal-123.github.io/YouTube-E-Com",
-  "private": true,
+  "private": false,
   "version": "0.0.0",
   "main": "../../Electron/main.js",
   "type": "module",

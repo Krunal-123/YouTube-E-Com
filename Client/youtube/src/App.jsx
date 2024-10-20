@@ -22,7 +22,7 @@ import OrderHistory from './OrderHistory.jsx';
 function App() {
   return (
     <>
-      <BrowserRouter>
+      <BrowserRouter basename='/YouTube-E-Com'>
           <Routes>
             <Route path='/' element={<HomePage />}>
               <Route path='/home' element={<Services />} />
