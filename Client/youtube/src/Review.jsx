@@ -26,7 +26,7 @@ export default function ReviewPage({ data, user }) {
     <Container className='my-3 '>
       <h1 className={`text-center text-4xl font-bold mb-3 text-${LightMode ? "white" : "dark"}`}>Customer Reviews</h1>
       {displayedReviews?.map((review, id) => (
-        <Card className={`border-2 border-white  mb-4 bg-${LightMode ? 'dark' : 'light'} ${LightMode ? "text-white" : "text-dark"}`}>
+        <Card key={id} className={`border-2 border-white  mb-4 bg-${LightMode ? 'dark' : 'light'} ${LightMode ? "text-white" : "text-dark"}`}>
           <CardContent className='leading-8'>
             <Typography variant="body2">
               <i>Date & Time:</i> {new Date(review.createdAt).toLocaleDateString()} | {new Date(review.createdAt).toLocaleTimeString()}

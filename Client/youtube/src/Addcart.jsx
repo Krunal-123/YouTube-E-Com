@@ -171,8 +171,8 @@ export default function Basic() {
                         <p className="mb-4 flex justify-between">Items :</p>
                         <p className="mb-4 flex justify-between">Prices :</p>
                       </div>
-                      {UserData?.map((d) => (
-                        <div className="d-flex justify-content-between mb-2 text-xl">
+                      {UserData?.map((d,id) => (
+                        <div key={id} className="d-flex justify-content-between mb-2 text-xl">
                           <p className="mb-4 flex justify-between">- {d.title}</p>
                           <p className="mb-4 flex justify-between">₹{Math.floor(d.price / 2).toLocaleString('en-IN')}</p>
                         </div>

@@ -68,20 +68,20 @@ const OrderHistory = () => {
   return (
     <>
       <Container className={`h-[75vh] mt-5 mb-3 px-5 shadow-xl rounded-4 pt-3 ${LightMode ? "bg-gray-900" : "bg-light"}`} maxWidth={'lg'}>
-        <h2 className={`text-3xl text-center font-bold mb-2 text-${LightMode?"white":"dark"}`}>#Order History</h2>
+        <h2 className={`text-3xl text-center font-bold mb-2 text-${LightMode ? "white" : "dark"}`}>#Order History</h2>
         <div className='h-[80%] w-[100%] overflow-y-auto'>
-          {[...user[0]?.orderhistory].reverse().map((order) => (
-            <OrderCard key={order._id} className='w-[90%] mx-auto my-3'>
-              <CardContent className={`${LightMode ? "bg-dark" : "bg-light"} text-${LightMode?"white":"dark"}`}>
+          {[...user[0]?.orderhistory].reverse().map((order,id) => (
+            <OrderCard key={id} className='w-[90%] mx-auto my-3'>
+              <CardContent className={`${LightMode ? "bg-dark" : "bg-light"} text-${LightMode ? "white" : "dark"}`}>
                 <Box display="flex" justifyContent="space-between" alignItems="center" flexWrap="wrap">
                   <Box className="flex flex-wrap w-[180px]">
-                    {order.id?.map((item) => (
+                    {order.id?.map((item, id) => (
                       <CardMedia
+                        key={id}
                         component="img"
                         image={item.img}
                         alt={item.img}
                         style={{ width: 80, borderRadius: 4, margin: 5 }}
-                        key={item.img}
                       />
                     ))}
                   </Box>
@@ -108,7 +108,7 @@ const OrderHistory = () => {
 
           {selectedOrder && (
             <OrderModal open={open} onClose={handleClose}>
-              <ModalContent className={`${LightMode ? "bg-dark" : "bg-light"} text-${LightMode?"white":"dark"}`}>
+              <ModalContent className={`${LightMode ? "bg-dark" : "bg-light"} text-${LightMode ? "white" : "dark"}`}>
                 <Typography variant="h6" gutterBottom>
                   Order Details
                 </Typography>
@@ -128,9 +128,9 @@ const OrderHistory = () => {
                   </Typography>
                   <hr className='py-2' />
                   <Grid container spacing={2} className='overflow-y-auto h-[300px] py-5'>
-                    {selectedOrder.id?.map((item) => (
+                    {selectedOrder.id?.map((item,id) => (
                       <>
-                        <Grid item xs={12} key={item._id}>
+                        <Grid item xs={12} key={id}>
                           <Box className={`flex justify-between px-5 `} alignItems="center">
                             <CardMedia
                               component="img"

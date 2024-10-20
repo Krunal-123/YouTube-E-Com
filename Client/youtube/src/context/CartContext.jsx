@@ -63,7 +63,7 @@ export const CartProvider = ({ children }) => {
   useEffect(() => {
     fetchData();
     console.log("check");
-  }, [cookies, cartItems, fav, add, LightMode]); // Removed cartItems from dependency to avoid infinite loop
+  }, [cookies, cartItems, fav, add]); // Removed cartItems from dependency to avoid infinite loop
 
   return (
     <CartContext.Provider value={{ cartItems, setCartItems, services, setServices, user, setUser, cookies, removeCookie, fav, setFav, open, setOpen, setAdd, isExploding, setIsExploding, LightMode, setLightMode, LengthCart, setLengthCart }}>
