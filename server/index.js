@@ -14,7 +14,7 @@ const sendOtpEmail = require('./mailer');
 const signupMail =require('./SignupMail')
 
 app.use(cors({
-    origin:['http://localhost:5174'],
+    origin:['http://localhost:5173'],
     methods:["POST","GET","DELETE","PATCH"],
     credentials:true
 }))
