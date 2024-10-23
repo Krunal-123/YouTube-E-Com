@@ -36,8 +36,8 @@ export const CartProvider = ({ children }) => {
       // Fetch services data
       const { data: servicesData } = await axios.post("http://localhost:3000/services");
       // console.log(servicesData);
-      let Status = servicesData.slice(0, 3).map(p => ({ ...p, status: "New", color: "primary" }))
-      let Status2 = servicesData.slice(3, 6).map(p => ({ ...p, status: "Trending🔥", color: "warning" }))
+      let Status = [...servicesData].slice(0, 3).map(p => ({ ...p, status: "New", color: "primary" }))
+      let Status2 = [...servicesData].slice(3, 6).map(p => ({ ...p, status: "Trending🔥", color: "warning" }))
       servicesData.splice(0, 6, ...Status.concat(Status2))
       setServices(servicesData);
 
