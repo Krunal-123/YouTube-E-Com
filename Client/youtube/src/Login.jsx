@@ -14,7 +14,6 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import 'react-toastify/dist/ReactToastify.css';
 import LoadingButtonsTransition from '../components/LoadingBtn';
-import { Toast } from '../components/SuccessToast'
 import { ErrorToast } from '../components/ErrorToast';
 import { useCookies } from 'react-cookie';
 import { toast } from 'react-toastify';
@@ -88,7 +87,6 @@ export default function SignInSide() {
     }
   };
 
-
   return (
     <ThemeProvider theme={defaultTheme}>
       <Grid container component="main" sx={{ height: '100vh' }}>
@@ -106,7 +104,7 @@ export default function SignInSide() {
             <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3, width: '100%' }}>
               <TextField margin="normal" required fullWidth id="email" label="Email Address" name="email" autoComplete="email" autoFocus sx={{ borderRadius: '8px', backgroundColor: '#f5f5f5' }} />
               <TextField margin="normal" required fullWidth name="password" label="Password" type="password" id="password" autoComplete="current-password" sx={{ borderRadius: '8px', backgroundColor: '#f5f5f5' }} />
-              <FormControlLabel control={<Checkbox checked={check} name="remember" value={remember_val} onChange={() => setCheck(p => !p)} color="primary" />} label="Remember me" />
+              <FormControlLabel control={<Checkbox checked={check} name="remember" value={remember_val} onChange={() => setCheck(previousState => !previousState)} color="primary" />} label="Remember me" />
 
               <LoadingButtonsTransition loading={loading} />
 
