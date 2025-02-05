@@ -12,7 +12,8 @@ function GridExample() {
   const [showModal, setShowModal] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
   const { myitems } = user[0]
-
+  
+  DisableScrollRestoration()
   const handleShowModal = (item) => {
     setSelectedItem(item);
     setShowModal(true);
@@ -31,7 +32,6 @@ function GridExample() {
     return (
       <section className="h-[65vh] md:h-[550px] bg-[length:100%_100%] bg-no-repeat bg-center bg-[url('https://www.pngkey.com/png/detail/365-3654131_cart-empty-image-your-cart-is-empty.png')]">
         <MDBContainer className="py-5">
-          <DisableScrollRestoration />
           <div className="text-center my-40 align-items-center">
             <h5 className='text-red-500 text-5xl md:text-7xl mb-5 font-bold d-flex justify-content-center font-mono'>
               You Haven't Buy Anything
@@ -47,7 +47,6 @@ function GridExample() {
 
   return (
     <Container className='my-10' maxWidth="xl">
-      <DisableScrollRestoration />
       <div className='flex justify-around'>
         {isExploding && <ConfettiExplosion force={1} duration={4500} particleCount={400} width={2000} />}
         {isExploding && <ConfettiExplosion force={1} duration={4500} particleCount={400} width={2000} />}

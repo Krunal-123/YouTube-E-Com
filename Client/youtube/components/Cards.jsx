@@ -26,7 +26,7 @@ export default function ({ id, img, title, description, btn, email, status, colo
     event.preventDefault() // Prevent the Link from triggering
     if (!isFavorited) {
       try {
-        let res = await axios.post("https://youtube-e-com-backend-copy.onrender.com/addfavourite", { email, id });
+        let res = await axios.post("https://youtube-e-com-backend.onrender.com/addfavourite", { email, id });
         if (res.data === 'save') {
           Toast('Add into Your Favorites List!😍', 1300)
           setFav((perviousState) => perviousState + 1)
@@ -38,7 +38,7 @@ export default function ({ id, img, title, description, btn, email, status, colo
         ErrorToast('An error occurred while adding to favorites', 2000);
       }
     } else {
-      await axios.post("https://youtube-e-com-backend-copy.onrender.com/addfavourite/delete", { email, id });
+      await axios.post("https://youtube-e-com-backend.onrender.com/addfavourite/delete", { email, id });
       ErrorToast('Remove from the Favourite List', 1400);
       setFav((perviousState) => perviousState - 1)
       setIsFavorited(false); // Update the state if successfully added to favorites

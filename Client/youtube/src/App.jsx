@@ -1,10 +1,9 @@
-import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
-
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { lazy } from 'react';
+import './App.css';
 
 import Login from './Login.jsx';
 import Signup from './Signup.jsx';
@@ -27,13 +26,11 @@ function App() {
   const router = createBrowserRouter(
     [
       {
-        future: {
-          v7_relativeSplatPaths: true, // Enable future behavior
-        },
-      },
-      {
         path: '/',
         element: <HomePage />,
+        future: {
+          v7_relativeSplatPath: true,
+        },
         children: [
           { path: 'home', element: <Services /> },
           { path: 'myprofile', element: <Myprofile /> },

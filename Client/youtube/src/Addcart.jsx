@@ -97,7 +97,6 @@ export default function Basic() {
   if (UserCard.length === 0) {
     return (
       <section className="h-[550px] bg-[length:100%_100%] bg-no-repeat bg-center bg-[url('https://www.pngkey.com/png/detail/365-3654131_cart-empty-image-your-cart-is-empty.png')]">
-        <DisableScrollRestoration />
         <Container className="py-5">
           <div className="text-center my-40 align-items-center">
             <h5 className='text-red-500 text-7xl mb-5 font-bold d-flex justify-content-center font-mono'><AiOutlineShoppingCart />Your cart is empty now</h5>

@@ -15,7 +15,8 @@ export default function PersonalProfile() {
   // New states for category and subcategory selections
   const [selectedCategory, setSelectedCategory] = useState('');
   const [selectedAvatar, setSelectedAvatar] = useState('');
-
+  
+  DisableScrollRestoration()
   const avatarCategories = {
     'Male': [
       { label: 'Male Avatar 1', value: 'https://yt3.ggpht.com/a/AATXAJzFE_5zKBk19JRw6RbSvLseEhNrI0W5qfPjoQ=s900-c-k-c0xffffffff-no-rj-mo' },
@@ -90,7 +91,6 @@ export default function PersonalProfile() {
   if (!user || user.length === 0) {
     return (
       <section className="bg-[#f4f5f7]">
-        <DisableScrollRestoration />
         <MDBContainer className="py-10 h-100">
           <MDBRow className="justify-content-center align-items-center h-100">
             <Spinner animation="border" />
@@ -102,7 +102,6 @@ export default function PersonalProfile() {
 
   return (
     <section className="">
-      <DisableScrollRestoration />
       <MDBContainer className="py-10 h-100">
         <MDBRow className="justify-content-center align-items-center h-100">
           <MDBCol lg="10" className="mb-4">
@@ -121,7 +120,7 @@ export default function PersonalProfile() {
                     <p className='flex justify-content-center text-3xl font-bold'>
                       <img src={editDetails?.gender == "Female" ?
                         "https://assets-global.website-files.com/62d22090d818f11cd8518c8d/62d22ae5360d5986f0356783_female-p-500.png"//female url
-                        : 
+                        :
                         'https://icons.iconarchive.com/icons/microsoft/fluentui-emoji-flat/256/Male-Sign-Flat-icon.png'//MAle url
                       }
                         className='h-[40px] my-3 rounded' />

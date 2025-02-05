@@ -16,7 +16,7 @@ export default function PrimarySearchAppBar() {
   const [ProfileHover, setProfileHover] = React.useState(false)
   const menuId = 'primary-search-account-menu';
   let navigate = useNavigate()
-
+  
   const{firstName,profilePic}=user[0]
 
   const Categoires = async (categorise) => {
@@ -56,14 +56,18 @@ export default function PrimarySearchAppBar() {
                 <SearchIcon className="absolute left-2 top-2" />
                 <input type="text" placeholder="Search...." className="pl-8 py-2 border border-dark rounded-lg w-[130px]" aria-label="search" onKeyDown={search} />
               </div>
+
               <div className="flex-grow hidden md:flex ml-4">
                 <Link to="/home">
                   <button className="my-2 block mx-2 bg-clip-text text-lg font-bold hover:text-transparent bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500">Home</button>
                 </Link>
+
                 {/* Categories */}
                 <div onMouseEnter={() => setCustom(true)} onMouseLeave={() => setCustom(false)}>
                   <button className="my-2  block mx-2 bg-clip-text text-lg font-bold hover:text-transparent bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500">Categoires</button>
                 </div>
+
+
                 {/* Categories Menu */}
                 <div className={`absolute z-50 mt-1 left-[120px] top-[50px] bg-${LightMode ? "dark" : "white"} border border-gray-300 rounded-md shadow-lg ${custom ? 'block' : 'hidden'}`} onMouseEnter={() => setCustom(true)} onMouseLeave={() => setCustom(false)}>
                   <button className="py-2 px-2 block mx-2 bg-clip-text text-md font-bold hover:text-transparent bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500" onClick={() => Categoires("editing")}>Editing Services</button>
@@ -77,13 +81,16 @@ export default function PrimarySearchAppBar() {
                   <hr />
                   <button className="w-[80%] text-center py-2 px-2 mx-2 bg-clip-text text-md font-bold hover:text-transparent bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500" onClick={() => Categoires("all")}>Explore All</button>
                 </div>
+
                 <Link to="/aboutus">
                   <button className="my-2  block mx-2 bg-clip-text text-lg font-bold hover:text-transparent bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500">About Us</button>
                 </Link>
+
                 <Link to="/contactus">
                   <button className="my-2  block mx-2 bg-clip-text text-lg font-bold hover:text-transparent bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500">Contact Us</button>
                 </Link>
               </div>
+
               <div className="flex-grow" />
               <div className="hidden md:flex items-center">
                 {/* Toggle Mode */}
@@ -93,7 +100,6 @@ export default function PrimarySearchAppBar() {
                   <SearchIcon className="absolute left-2 top-2" />
                   <input type="text" placeholder="Search...." className={`pl-10 pr-4 py-2 border border-bg-${LightMode ? "dark" : "white"} rounded-lg bg-${LightMode ? "dark" : "white"}`} aria-label="search" onKeyDown={search} />
                 </div>
-
                 {/*///// DIVISION ///*/}
                 {/* ##-USER NAME-## */}
                 <div className="m-2 font-bold rounded-md bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 p-[3px]">

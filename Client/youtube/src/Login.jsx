@@ -42,20 +42,19 @@ export default function SignInSide() {
   let remember_val = check ? "remember" : "not remember"
   let navigate = useNavigate();
 
-  axios.defaults.withCredentials = true;
   const handleSubmit = async (event) => {
     event.preventDefault();
     setLoading(previousState => !previousState)
     const { email, password, remember } = event.target;
-    const data = {
-      email: (email.value.trim()),
-      password: (password.value.trim()),
+    const logInfo = {
+      email: (email.value).trim(),
+      password: (password.value).trim(),
     };
 
     try {
-      const res = await axios.post(`https://youtube-e-com-backend-copy.onrender.com/login`, data);
-      if (res.data === 'Invalid credentials') {
-        ErrorToast('INVALID EMAIL OR PASSWORD', 2000);
+      const { data } = await axios.post(`https://youtube-e-com-backend.onrender.com/login`, logInfo)
+      if (data == 'Invalid credentials') {
+        ErrorToast('INVALID EMAIL OR PASSWORD', 2000)
         setLoading(previousState => !previousState)
       }
       else {
@@ -69,12 +68,7 @@ export default function SignInSide() {
           progress: undefined,
           theme: 'light',
         });
-        if (remember.value == 'remember') {
-          setCookie('token', res.data, { maxAge: 28 * 60 * 60 * 1000 })
-        }
-        else {
-          setCookie('token', res.data)
-        }
+        remember.value == 'remember' ? setCookie('token', data, { maxAge: 28 * 60 * 60 * 1000 }) : setCookie('token', data)
         setTimeout(() => {
           navigate('/home');
           window.location.reload();
@@ -93,8 +87,7 @@ export default function SignInSide() {
         <CssBaseline />
         <Grid item xs={false} sm={4} md={7} sx={{ backgroundImage: 'url("https://cdn.dribbble.com/users/1369921/screenshots/3699553/yt-new-button-yoodle.gif")', backgroundRepeat: 'no-repeat', backgroundSize: 'cover', backgroundPosition: 'center', backgroundColor: '#282c34' }} />
         <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square sx={{ background: 'linear-gradient(to bottom, #3f51b5, #9c27b0)' }}>
-          <Box
-            sx={{ my: 8, mx: 4, display: 'flex', flexDirection: 'column', alignItems: 'center', backgroundColor: 'white', borderRadius: '12px', boxShadow: '0 4px 10px rgba(0,0,0,0.3)', p: 4 }}>
+          <Box sx={{ my: 8, mx: 4, display: 'flex', flexDirection: 'column', alignItems: 'center', backgroundColor: 'white', borderRadius: '12px', boxShadow: '0 4px 10px rgba(0,0,0,0.3)', p: 4 }}>
             <Avatar alt="Logo" src="https://media.tenor.com/q3NBbq09nuYAAAAC/youtube-logo.gif" sx={{ width: 80, height: 80, mb: 2 }} />
             <Typography component="h1" variant="h5" sx={{ fontWeight: 'bold', color: '#3f51b5' }}>
               Sign in

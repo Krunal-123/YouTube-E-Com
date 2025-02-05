@@ -94,78 +94,33 @@ export default function SignUp() {
       <ThemeProvider theme={darkTheme}>
         <Container component="main" maxWidth="xs">
           <CssBaseline />
-          <Box
-            sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-            }}
-          >
-            <Avatar
-              alt="Remy Sharp"
-              src="https://media.tenor.com/q3NBbq09nuYAAAAC/youtube-logo.gif"
-              sx={{ width: 56, height: 56 }}
-              className='mt-2'
-            />
+          <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', }}>
+            <Avatar alt="Remy Sharp" src="https://media.tenor.com/q3NBbq09nuYAAAAC/youtube-logo.gif" sx={{ width: 56, height: 56 }} className='mt-2' />
             <Typography component="h1" variant="h5">
-              Sign up
+              clsSign up
             </Typography>
             <form onSubmit={handleSubmit} className='max-md:my-3 md:my-5'>
               <Grid container spacing={2}>
+
                 <Grid item xs={12} sm={6}>
-                  <TextField
-                    autoComplete="given-name"
-                    name="firstName"
-                    fullWidth
-                    id="firstName"
-                    label="First Name"
-                    required
-                  />
+                  <TextField autoComplete="given-name" name="firstName" fullWidth id="firstName" label="First Name" required />
                 </Grid>
+
                 <Grid item xs={12} sm={6}>
-                  <TextField
-                    fullWidth
-                    id="lastName"
-                    label="Last Name"
-                    name="lastName"
-                    required
-                    autoComplete=""
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    fullWidth
-                    id="phone"
-                    label="Phone No"
-                    name="number"
-                    required
-                    autoComplete="phone"
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    fullWidth
-                    id="email"
-                    label="Email Address"
-                    name="email"
-                    required
-                    autoComplete="email"
-                  />
+                  <TextField fullWidth id="lastName" label="Last Name" name="lastName" required autoComplete="" />
                 </Grid>
 
                 <Grid item xs={12}>
+                  <TextField fullWidth id="phone" label="Phone No" name="number" required autoComplete="phone" />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField fullWidth id="email" label="Email Address" name="email" required autoComplete="email" />
+                </Grid>
 
+                <Grid item xs={12}>
                   <FormControl fullWidth>
                     <InputLabel id="demo-simple-select-label">Gender</InputLabel>
-                    <Select
-                      labelId="demo-simple-select-label"
-                      id="demo-simple-select"
-                      name='gender'
-                      value={age}
-                      label="Gender"
-                      onChange={handleChange}
-                      required
-                    >
+                    <Select labelId="demo-simple-select-label" id="demo-simple-select" name='gender' value={age} label="Gender" onChange={handleChange} required>
                       <MenuItem value={"Male"}>Male</MenuItem>
                       <MenuItem value={"Female"}>Female</MenuItem>
                     </Select>
@@ -173,33 +128,15 @@ export default function SignUp() {
                 </Grid>
 
                 <Grid item xs={12}>
-                  <TextField
-                    fullWidth
-                    name="password"
-                    label="Password"
-                    type="password"
-                    id="password"
-                    autoComplete="password"
-                    required
-                  />
+                  <TextField fullWidth name="password" label="Password" type="password" id="password" autoComplete="password" required />
                 </Grid>
+
                 <Grid item xs={12}>
-                  <TextField
-                    fullWidth
-                    name="Confirm"
-                    label="Confirm password"
-                    type="password"
-                    id="confirm"
-                    autoComplete="password"
-                    required
-                  />
+                  <TextField fullWidth name="Confirm" label="Confirm password" type="password" id="confirm" autoComplete="password" required />
                 </Grid>
+
                 <Grid item xs={12}>
-                  <FormControlLabel
-                    required
-                    control={<Checkbox value="allowExtraEmails" name="check" color="primary" />}
-                    label="I want to receive inspiration, marketing promotions and updates via email."
-                  />
+                  <FormControlLabel required control={<Checkbox value="allowExtraEmails" name="check" color="primary" />} label="I want to receive inspiration, marketing promotions and updates via email." />
                 </Grid>
               </Grid>
               <LoadingButtonsTransition loading={loading} text={'Sign Up'} loadingText={'Uploading...'} />

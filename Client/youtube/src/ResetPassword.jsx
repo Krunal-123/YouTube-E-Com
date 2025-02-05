@@ -45,7 +45,6 @@ export default function ResetPassword() {
       ErrorToast("Password Not Match", 2000)
       return;
     }
-
     try {
       const res = await axios.patch('https://youtube-e-com-backend.onrender.com/reset-password', { email, password });
       if (res.data == 'password_reset') {

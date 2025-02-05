@@ -6,10 +6,10 @@ import DisableScrollRestoration from '../components/DisableScrollRestoration';
 
 function AboutUs() {
   const { LightMode } = useCart()
+  DisableScrollRestoration()
   return (
     <>
       {/* Header Section */}
-      <DisableScrollRestoration />
       <div className="text-white text-center bg-gray-900 h-64 flex justify-center items-center">
         <div>
           <h1 className="text-5xl font-bold">About Us</h1>
