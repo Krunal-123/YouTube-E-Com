@@ -1,24 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import {
-  MDBCol,
-  MDBContainer,
-  MDBRow,
-  MDBCard,
-  MDBCardText,
-  MDBCardBody,
-  MDBCardImage,
-  MDBTypography,
-  MDBIcon,
-  MDBInput,
-} from 'mdb-react-ui-kit';
+import { MDBContainer, MDBRow, MDBCol, MDBCard, MDBCardText, MDBCardBody, MDBCardImage, MDBTypography, MDBIcon, MDBInput } from 'mdb-react-ui-kit';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import { useCart } from './context/CartContext';
 import { Button, Spinner } from 'react-bootstrap';
 import axios from 'axios';
+import DisableScrollRestoration from '../components/DisableScrollRestoration';
 
 export default function PersonalProfile() {
-  const { user, setUser,LightMode } = useCart();
+  const { user, setUser, LightMode } = useCart();
   const [isEditing, setIsEditing] = useState(false);
   const [editDetails, setEditDetails] = useState({});
 
@@ -52,9 +42,9 @@ export default function PersonalProfile() {
   // UseEffect to initialize editDetails with user data
   useEffect(() => {
     if (user && user.length > 0) {
-      const { profilePic, firstName, lastName, email, gender, number, _id} = user[0];
+      const { profilePic, firstName, lastName, email, gender, number, _id, createdAt } = user[0];
       setSelectedAvatar(profilePic);
-      setEditDetails({ profilePic, firstName, lastName, email, gender, number, _id });
+      setEditDetails({ profilePic, firstName, lastName, email, gender, number, _id, createdAt });
     }
   }, [user]);
   useEffect(() => {
@@ -83,7 +73,7 @@ export default function PersonalProfile() {
 
   const handleSave = async () => {
     try {
-      let res = await axios.patch("http://localhost:3000/updatedetails", editDetails);
+      let res = await axios.patch("https://youtube-e-com-backend.onrender.com/updatedetails", editDetails);
       setIsEditing(false);
       setUser([{ ...user[0], ...editDetails }]);
     } catch (error) {
@@ -100,6 +90,7 @@ export default function PersonalProfile() {
   if (!user || user.length === 0) {
     return (
       <section className="bg-[#f4f5f7]">
+        <DisableScrollRestoration />
         <MDBContainer className="py-10 h-100">
           <MDBRow className="justify-content-center align-items-center h-100">
             <Spinner animation="border" />
@@ -111,12 +102,13 @@ export default function PersonalProfile() {
 
   return (
     <section className="">
+      <DisableScrollRestoration />
       <MDBContainer className="py-10 h-100">
         <MDBRow className="justify-content-center align-items-center h-100">
           <MDBCol lg="10" className="mb-4">
-            <MDBCard className={`mb-3 shadow-2xl rounded-2xl ${LightMode?"bg-dark":"bg-white"} ${LightMode?"text-white":"text-dark"}`}>
+            <MDBCard className={`mb-3 shadow-2xl rounded-2xl ${LightMode ? "bg-dark" : "bg-white"} ${LightMode ? "text-white" : "text-dark"}`}>
               <MDBRow className="g-0">
-                <MDBCol md="4" className="bg-[url(https://img.freepik.com/free-vector/black-wallpaper-with-silver-geometric-lines_1017-30669.jpg?w=996&t=st=1693673570~exp=1693674170~hmac=a816b7b1607c955137b5ce41b9e03a09728e8d16335a2e395beb5818dc43c41d)] bg-fill text-center text-white"
+                <MDBCol md="4" className="bg-[url(https://img.freepik.com/free-vector/black-wallpaper-with-silver-geometric-lines_1017-30669.jpg?w=996&t=st=1693673570~exp=1693674170~hmac=a816b7b1607c955137b5ce41b9e03a09728e8d16335a2e395beb5818dc43c41d)] bg-cover text-center text-white"
                   style={{ borderTopLeftRadius: '.5rem', borderBottomLeftRadius: '.5rem' }}>
                   <MDBCardImage
                     src={editDetails.profilePic || "default-avatar-url.jpg"}
@@ -127,11 +119,12 @@ export default function PersonalProfile() {
                   <MDBTypography tag="h5" className="mb-0 text-3xl font-bold">
                     <i className="font-mono text-4xl">{editDetails?.gender == "Male" ? "MR." : "MS."}</i><span>{editDetails.firstName} {editDetails.lastName}</span>
                     <p className='flex justify-content-center text-3xl font-bold'>
-                      <img src={editDetails?.gender=="Male"?
-                      'https://icons.iconarchive.com/icons/microsoft/fluentui-emoji-flat/256/Male-Sign-Flat-icon.png'//MAle url
-                      :"https://assets-global.website-files.com/62d22090d818f11cd8518c8d/62d22ae5360d5986f0356783_female-p-500.png"//female url
+                      <img src={editDetails?.gender == "Female" ?
+                        "https://assets-global.website-files.com/62d22090d818f11cd8518c8d/62d22ae5360d5986f0356783_female-p-500.png"//female url
+                        : 
+                        'https://icons.iconarchive.com/icons/microsoft/fluentui-emoji-flat/256/Male-Sign-Flat-icon.png'//MAle url
                       }
-                      className='h-[40px] my-3 rounded'/>
+                        className='h-[40px] my-3 rounded' />
                     </p>
                   </MDBTypography>
                   <div className='mb-5 text-xl hover:text-green-400 transition easy-in-out hover:scale-[1.2] hover:underline font-bold' onClick={handleEditToggle} style={{ cursor: 'pointer' }}>
@@ -141,7 +134,7 @@ export default function PersonalProfile() {
                 </MDBCol>
                 <MDBCol md="8" className='py-5'>
                   <MDBCardBody className="px-5 pt-5 text-lg font-semibold">
-                    <MDBTypography tag="h6">Account ID: {editDetails._id}</MDBTypography>
+                    <MDBTypography tag="h6" className='flex justify-between'><span>Account ID: {editDetails._id}</span> {editDetails.createdAt && <span>createdAt: {new Date(editDetails.createdAt).toLocaleDateString()}</span>}</MDBTypography>
                     <hr className="mt-2 mb-4" />
                     <MDBRow className="pt-1">
                       <MDBCol size="6" className="mb-3">
@@ -156,13 +149,13 @@ export default function PersonalProfile() {
                               name="firstName"
                               value={editDetails.firstName}
                               onChange={handleInputChange}
-                              className={`${LightMode?"bg-dark":"bg-white"} ${LightMode?"text-white":"text-dark"} mb-2`}
+                              className={`${LightMode ? "bg-dark" : "bg-white"} ${LightMode ? "text-white" : "text-dark"} mb-2`}
                             />
                             <MDBInput
                               name="lastName"
                               value={editDetails.lastName}
                               onChange={handleInputChange}
-                              className={`${LightMode?"bg-dark":"bg-white"} ${LightMode?"text-white":"text-dark"}`}
+                              className={`${LightMode ? "bg-dark" : "bg-white"} ${LightMode ? "text-white" : "text-dark"}`}
                             />
                           </>
                         ) : (
@@ -184,7 +177,7 @@ export default function PersonalProfile() {
                               value={editDetails.gender}
                               onChange={handleCategoryChange}
                               fullWidth
-                              className={`${LightMode?"bg-dark":"bg-white"} ${LightMode?"text-white":"text-dark"}`}
+                              className={`${LightMode ? "bg-dark" : "bg-white"} ${LightMode ? "text-white" : "text-dark"}`}
                             >
                               {Object.keys(avatarCategories).map((category) => (
                                 <MenuItem key={category} value={category} >
@@ -202,17 +195,13 @@ export default function PersonalProfile() {
                               onChange={handleAvatarChange}
                               fullWidth
                               disabled={!editDetails.gender}
-                              className={`${LightMode?"bg-dark":"bg-white"} ${LightMode?"text-white":"text-dark"}`}
+                              className={`${LightMode ? "bg-dark" : "bg-white"} ${LightMode ? "text-white" : "text-dark"}`}
                             >
                               {selectedCategory &&
-                                avatarCategories[selectedCategory].map((avatar, i) => (
-                                  <MenuItem key={i} value={avatar.value} className={`${LightMode?"bg-dark":"bg-white"} ${LightMode?"text-white":"text-dark"}`}>
-                                    <img
-                                      src={avatar.value}
-                                      alt={avatar.label}
-                                      className="w-[50px] h-[50px] mr-2"
-                                    />
-                                    {avatar.label}
+                                avatarCategories[selectedCategory].map(({ value, label }, index) => (
+                                  <MenuItem key={index} value={value} className={`${LightMode ? "bg-dark" : "bg-white"} ${LightMode ? "text-white" : "text-dark"}`}>
+                                    <img src={value} alt={label} className="w-[50px] h-[50px] mr-2" />
+                                    {label}
                                   </MenuItem>
                                 ))}
                             </Select>

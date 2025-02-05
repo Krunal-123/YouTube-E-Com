@@ -2,12 +2,14 @@ import React from 'react';
 import { Accordion, Col, Row } from 'react-bootstrap';
 import { FaUsers, FaLightbulb, FaCogs, FaSmile, FaHistory } from 'react-icons/fa';
 import { useCart } from './context/CartContext';
+import DisableScrollRestoration from '../components/DisableScrollRestoration';
 
 function AboutUs() {
-  const{LightMode}=useCart()
+  const { LightMode } = useCart()
   return (
     <>
       {/* Header Section */}
+      <DisableScrollRestoration />
       <div className="text-white text-center bg-gray-900 h-64 flex justify-center items-center">
         <div>
           <h1 className="text-5xl font-bold">About Us</h1>
@@ -31,7 +33,7 @@ function AboutUs() {
             <h2 className="text-2xl font-bold mb-2">Our Mission</h2>
             <p className={`text-${LightMode ? "white" : "dark"}`}>Our mission is to provide high-quality solutions that make life easier and more enjoyable for our customers. We strive to lead the industry with our innovative ideas.</p>
           </div>
-          
+
           <div className={`shadow-lg p-6 text-center bg-${LightMode ? "dark" : "white"} text-${LightMode ? "white" : "dark"}`}>
             <FaCogs size={50} className="mb-4 text-green-500 mx-auto" />
             <h2 className="text-2xl font-bold mb-2">Our Services</h2>
@@ -55,39 +57,16 @@ function AboutUs() {
 
         {/* Team Members Section */}
         <div className="mb-12">
-          <h2 className={`text-4xl font-bold text-center mb-6 text-${LightMode ? "white" : "dark"}`}>Meet Our Team</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-
-            <div className={`shadow-lg rounded-lg overflow-hidden text-${LightMode ? "white" : "dark"} bg-${LightMode ? "dark" : "white"}`}>
-              <img src={'https://th.bing.com/th/id/OIP.OWHqt6GY5jrr7ETvJr8ZXwHaHa?rs=1&pid=ImgDetMain'} alt="Rishi Mohinani" className="h-80 w-full object-cover" />
-              <div className="p-6 text-center">
-                <h3 className="text-2xl font-bold">Rishi Mohinani</h3>
-                <p className="text-blue-300">MEAN Developer</p>
-                <img src="https://ahex.co/wp-content/uploads/2022/06/MeanStack.png" className="h-10 mx-auto mt-4" alt="Stack" />
-                {/* <p className="text-gray-600">Position 2</p> */}
-              </div>
-
-            </div>
-            <div className={`shadow-lg rounded-lg overflow-hidden bg-${LightMode ? "dark" : "white"} text-${LightMode ? "white" : "dark"}`}>
-              <img src={'https://th.bing.com/th/id/OIP.OWHqt6GY5jrr7ETvJr8ZXwHaHa?rs=1&pid=ImgDetMain'} alt="Krunal Parmar" className="h-80 w-full object-cover" />
+          <h2 className={`text-4xl font-bold text-center mb-6 text-${LightMode ? "white" : "dark"}`}>Meet To Our Developer</h2>
+          <div className="flex justify-around">
+            <div className={`shadow-lg rounded-lg overflow-hidden bg-${LightMode ? "dark" : "white"} text-${LightMode ? "white" : "dark"} w-[400px]`}>
+              <img src={'https://res.cloudinary.com/dlhikwznm/image/upload/v1730019097/krunali_ipzrdb.jpg'} alt="Krunal Parmar" className="h-80 w-full object-fill" />
               <div className="p-6 text-center">
                 <h3 className="text-2xl font-bold">Krunal Parmar</h3>
-                <p className="text-blue-500">Full Stack Developer</p>
+                <p className="text-blue-400 font-bold">Full Stack Developer</p>
                 <img src="https://res.cloudinary.com/practicaldev/image/fetch/s--6rc65PKG--/c_imagga_scale,f_auto,fl_progressive,h_420,q_auto,w_1000/https://dev-to-uploads.s3.amazonaws.com/uploads/articles/6uua71pthj5ricfxhh3m.png" className="h-10 mx-auto mt-4" alt="Stack" />
-                {/* <p className="text-gray-600">Position 1</p> */}
               </div>
             </div>
-
-            <div className={`shadow-lg rounded-lg overflow-hidden bg-${LightMode ? "dark" : "white"} text-${LightMode ? "white" : "dark"}`}>
-              <img src={'https://th.bing.com/th/id/OIP.OWHqt6GY5jrr7ETvJr8ZXwHaHa?rs=1&pid=ImgDetMain'} alt="Sahil Chandnani" className="h-80 w-full object-cover" />
-              <div className="p-6 text-center">
-                <h3 className="text-2xl font-bold">Sahil Chandnani</h3>
-                <p className="text-gray-600">Web Designer</p>
-                <img src="https://mir-s3-cdn-cf.behance.net/projects/404/a015b0111578897.Y3JvcCw1NDgsNDI4LDMzNiwxOTQ.png" className="h-10 mx-auto mt-4" alt="Stack" />
-                {/* <p className="text-gray-600">Position 3</p> */}
-              </div>
-            </div>
-
           </div>
         </div>
 
@@ -121,13 +100,13 @@ function AboutUs() {
                 testimonial: "The results were phenomenal. Their dedication and expertise really shone through every step of the way. Highly recommend!",
                 image: "https://pubglitemobile.com/wp-content/uploads/2021/05/Soul-Mortal-PUBG.jpg"
               }
-            ].map((client, index) => (
+            ].map(({ image, name, testimonial }, index) => (
               <div key={index} className={`shadow-lg rounded-lg overflow-hidden bg-${LightMode ? "dark" : "white"} text-${LightMode ? "white" : "dark"}`}>
-                <img src={client.image} alt={client.name} className="h-80 w-full object-cover" />
+                <img src={image} alt={name} className="h-80 w-full object-cover" />
                 <div className="p-6 text-center">
                   <FaSmile size={30} className="my-2 text-yellow-500 mx-auto" />
-                  <p className="font-bold text-xl mb-2">"{client.name}"</p>
-                  <p className="">"{client.testimonial}"</p>
+                  <p className="font-bold text-xl mb-2">"{name}"</p>
+                  <p className="">"{testimonial}"</p>
                 </div>
               </div>
             ))}
@@ -138,7 +117,7 @@ function AboutUs() {
         <Row className="my-5">
           <Col md={12} >
             <h2 className={`text-4xl font-bold text-center mb-6 text-${LightMode ? "white" : "dark"}`}>Frequently Asked Questions</h2>
-            <Accordion  data-bs-theme={`${LightMode ? "dark" : "light"}`}>
+            <Accordion data-bs-theme={`${LightMode ? "dark" : "light"}`}>
               <Accordion.Item eventKey="0">
                 <Accordion.Header>What services do you offer?</Accordion.Header>
                 <Accordion.Body>

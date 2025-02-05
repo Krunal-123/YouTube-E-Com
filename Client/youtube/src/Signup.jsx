@@ -1,6 +1,5 @@
 import * as React from 'react';
 import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -17,8 +16,9 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-import { errorToast } from '../components/ErrorToast';
+import { ErrorToast } from '../components/ErrorToast';
 import { Toast } from '../components/SuccessToast';
+import LoadingButtonsTransition from '../components/LoadingBtn';
 
 function Copyright(props) {
   return (
@@ -36,46 +36,61 @@ function Copyright(props) {
 // TODO remove, this demo shouldn't need to reset the theme.
 const darkTheme = createTheme({
   palette: {
-    mode: 'dark',
+    mode: 'light',
   },
 });
 
 export default function SignUp() {
 
   const [age, setAge] = React.useState('');
+  const [loading, setLoading] = React.useState(false);
 
   const handleChange = (event) => {
     setAge(event.target.value);
   };
   let navigate = useNavigate()
+
   const handleSubmit = (event) => {
-    event.preventDefault();
-    const { firstName, lastName, email, number, password, confirm, gender, check } = event.target
-    // console.log(firstName.value, lastName.value, number.value, email.value, gender.value, password.value, confirm.value, check.value);
-    if (number.value.length !== 10) {
-      errorToast('Invalid phone number! Please Enter the 10-digit!', 4000);
-      return;
-    }
-    if (password.value == confirm.value) {
-      let data = { firstName: firstName.value, lastName: lastName.value, number: number.value, email: email.value, gender: gender.value, password: password.value, confirm: confirm.value }
-      axios.post('http://localhost:3000/signup', data)
-        .then((res) => {
-          console.log(res);
+    try {
+      event.preventDefault();
+      setLoading(previousState => !previousState)
+      const { firstName, lastName, email, number, password, confirm, gender } = event.target
+      if (number.value.length < 10) {
+        ErrorToast('Invalid phone number! Please Enter the 10-digit!', 3000);
+        setLoading(previousState => !previousState)
+        return;
+      }
+      if (number.value.length > 10) {
+        ErrorToast('Please Enter the 10-digit Number Only!', 3000);
+        setLoading(previousState => !previousState)
+        return;
+      }
+      if (password.value == confirm.value) {
+        let data = { firstName: (firstName.value).trim(), lastName: (lastName.value).trim(), number: (number.value).trim(), email: (email.value).trim(), gender: (gender.value).trim(), password: (password.value).trim(), confirm: (confirm.value).trim() }
+        axios.post('https://youtube-e-com-backend.onrender.com/signup', data).then((res) => {
           if (res.data == 'user_already_exist') {
-            errorToast('Email Already Exist', 2000)
+            setLoading(previousState => !previousState)
+            ErrorToast('Email Already Exist', 2000)
+            return;
           } else {
             navigate('/login')
-            Toast('Account Created Successfully🎉', 2000)
+            Toast('🥳New Account Created🎉', 2000)
           }
         })
-    }
-    else {
-      errorToast('Check Password Again', 1200)
+        return;
+      }
+      else {
+        ErrorToast('Check Password Again', 2000)
+        setLoading(previousState => !previousState)
+      }
+    } catch (error) {
+      setLoading(previousState => !previousState)
+      console.log("Error Occured", error);
     }
   };
 
   return (
-    <div className="bg-dark h-[100vh] text-light pt-2 bg-cover bg-no-repeat bg-center bg-[url('https://cdn.dribbble.com/users/4815823/screenshots/18023140/youtube-shot.gif')]">
+    <div className="text-dark pt-2 bg-[length:100%_60%] md:bg-[length:100%_100%] bg-no-repeat bg-center bg-[url('https://cdn.dribbble.com/users/6750733/screenshots/18300442/gif1.gif')]">
       <ThemeProvider theme={darkTheme}>
         <Container component="main" maxWidth="xs">
           <CssBaseline />
@@ -95,8 +110,8 @@ export default function SignUp() {
             <Typography component="h1" variant="h5">
               Sign up
             </Typography>
-            <form onSubmit={handleSubmit} className='my-5'>
-              <Grid container spacing={2} className='text-light'>
+            <form onSubmit={handleSubmit} className='max-md:my-3 md:my-5'>
+              <Grid container spacing={2}>
                 <Grid item xs={12} sm={6}>
                   <TextField
                     autoComplete="given-name"
@@ -187,14 +202,7 @@ export default function SignUp() {
                   />
                 </Grid>
               </Grid>
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                sx={{ mt: 3, mb: 2 }}
-              >
-                Sign Up
-              </Button>
+              <LoadingButtonsTransition loading={loading} text={'Sign Up'} loadingText={'Uploading...'} />
             </form>
             <Grid container className='flex justify-center'>
               <Grid item>
@@ -204,7 +212,7 @@ export default function SignUp() {
               </Grid>
             </Grid>
           </Box>
-          <Copyright sx={{ mt: 5 }} />
+          <Copyright sx={{ my: 2 }} />
         </Container>
       </ThemeProvider>
     </div>

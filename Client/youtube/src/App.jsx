@@ -3,49 +3,63 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
 
-import { Routes, Route, BrowserRouter } from "react-router-dom";
-import Login from '../components/Login.jsx';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { lazy } from 'react';
+
+import Login from './Login.jsx';
 import Signup from './Signup.jsx';
 import HomePage from './HomePage.jsx';
-import About from './Aboutus.jsx';
-import Contact from './Contactus.jsx';
-import ErrorPage from "../components/ErrorPage.jsx"
-import Services from './Services.jsx';
-import DetailCard from './DeatilCard.jsx'
-import Addcart from './Addcart.jsx'
-import Mypurchase from './Mypurchase.jsx'
-import Myprofile from './Myprofile.jsx'
-import ForgotPassword from './ForgotPassword.jsx';
-import ResetPassword from './ResetPassword.jsx';
-import Myfavourites from './Myfavourites.jsx'
-import OrderHistory from './OrderHistory.jsx';
+
+const About = lazy(() => import('./Aboutus.jsx'));
+const Contact = lazy(() => import('./Contactus.jsx'));
+const Services = lazy(() => import('./Services.jsx'));
+const DetailCard = lazy(() => import('./DeatilCard.jsx'));
+const Addcart = lazy(() => import('./Addcart.jsx'));
+const Mypurchase = lazy(() => import('./Mypurchase.jsx'));
+const Myprofile = lazy(() => import('./Myprofile.jsx'));
+const ForgotPassword = lazy(() => import('./ForgotPassword.jsx'));
+const ResetPassword = lazy(() => import('./ResetPassword.jsx'));
+const Myfavourites = lazy(() => import('./Myfavourites.jsx'));
+const OrderHistory = lazy(() => import('./OrderHistory.jsx'));
+const ErrorPage = lazy(() => import('../components/ErrorPage.jsx'));
 
 function App() {
+  const router = createBrowserRouter(
+    [
+      {
+        future: {
+          v7_relativeSplatPaths: true, // Enable future behavior
+        },
+      },
+      {
+        path: '/',
+        element: <HomePage />,
+        children: [
+          { path: 'home', element: <Services /> },
+          { path: 'myprofile', element: <Myprofile /> },
+          { path: 'mypurchase', element: <Mypurchase /> },
+          { path: 'aboutus', element: <About /> },
+          { path: 'services/:id', element: <DetailCard /> },
+          { path: 'addcart', element: <Addcart /> },
+          { path: 'contactus', element: <Contact /> },
+          { path: 'myfavourites', element: <Myfavourites /> },
+          { path: 'orderhistory', element: <OrderHistory /> },
+        ],
+      },
+      { path: '/login', element: <Login /> },
+      { path: '/forgot-password', element: <ForgotPassword /> },
+      { path: '/reset-password/:email', element: <ResetPassword /> },
+      { path: '/signup', element: <Signup /> },
+      { path: '*', element: <ErrorPage /> },
+    ],
+  );
+
   return (
     <>
-      <BrowserRouter>
-          <Routes>
-            <Route path='/' element={<HomePage />}>
-              <Route path='/home' element={<Services />} />
-              <Route path='/myprofile' element={<Myprofile />} />
-              <Route path='/mypurchase' element={<Mypurchase />} />
-              <Route path='/aboutus' element={<About />} />
-              <Route path='services/:id' element={<DetailCard />} />
-              <Route path='/addcart' element={<Addcart />} />
-              <Route path='/contactus' element={<Contact />} />
-              <Route path='/myfavourites' element={<Myfavourites />} />
-              <Route path='/orderhistory' element={<OrderHistory />} />
-            </Route>
-            <Route path='/login' element={<Login />} />
-            <Route path="/forgot-password" element={<ForgotPassword />} />
-            <Route path="/reset-password/:email" element={<ResetPassword />} />
-            <Route path='/signup' element={<Signup />} />
-            <Route path='*' element={<ErrorPage />} />
-          </Routes>
-          <ToastContainer />
-      </BrowserRouter>
+      <RouterProvider router={router} />
+      <ToastContainer />
     </>
-  )
+  );
 }
 
 export default App;

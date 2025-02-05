@@ -5,8 +5,9 @@ import { Link } from 'react-router-dom';
 import Badge from 'react-bootstrap/Badge';
 import { Button, Spinner } from 'react-bootstrap';
 import { FaRegHeart } from 'react-icons/fa'; // Importing the heart icon
-import { toast } from 'react-toastify';
 import { useCart } from '../src/context/CartContext';
+import { Toast } from './SuccessToast';
+import { ErrorToast } from './ErrorToast';
 
 export default function ({ id, img, title, description, btn, email, status, color }) {
   const { user, setFav, LightMode } = useCart();
@@ -15,7 +16,7 @@ export default function ({ id, img, title, description, btn, email, status, colo
   // useEffect to update the favorite state based on user data
   useEffect(() => {
     if (user) {
-      const check = user[0]?.myfavourites.some((d) => d._id == id);
+      const check = user[0]?.myfavourites.some(({ _id }) => _id == id);
       setIsFavorited(check);
     }
   }, [user, id]);
@@ -25,48 +26,21 @@ export default function ({ id, img, title, description, btn, email, status, colo
     event.preventDefault() // Prevent the Link from triggering
     if (!isFavorited) {
       try {
-        let res = await axios.post("http://localhost:3000/addfavourite", { email, id });
+        let res = await axios.post("https://youtube-e-com-backend-copy.onrender.com/addfavourite", { email, id });
         if (res.data === 'save') {
-          toast.success('Add into Your Favorites List!😍', {
-            position: "top-center",
-            autoClose: 1300,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: false,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-          });
-          setFav((p) => p + 1)
+          Toast('Add into Your Favorites List!😍', 1300)
+          setFav((perviousState) => perviousState + 1)
           setIsFavorited(true); // Update the state if successfully added to favorites
         } else {
           throw new Error('Failed to add');
         }
       } catch (error) {
-        toast.error('An error occurred while adding to favorites', {
-          position: "top-center",
-          autoClose: 2000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: false,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-        });
+        ErrorToast('An error occurred while adding to favorites', 2000);
       }
     } else {
-      await axios.post("http://localhost:3000/addfavourite/delete", { email, id });
-      toast.error('Remove from the Favourite List', {
-        position: "top-center",
-        autoClose: 1300,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: false,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-      });
-      setFav((p) => p - 1)
+      await axios.post("https://youtube-e-com-backend-copy.onrender.com/addfavourite/delete", { email, id });
+      ErrorToast('Remove from the Favourite List', 1400);
+      setFav((perviousState) => perviousState - 1)
       setIsFavorited(false); // Update the state if successfully added to favorites
     }
   };
@@ -77,16 +51,11 @@ export default function ({ id, img, title, description, btn, email, status, colo
   }
 
   return (
-    <Card className={`border-0 w-[350px] h-[500px] m-auto transition duration-500 ease-in-out hover:scale-105 shadow-2xl ${LightMode ? "hover:shadow-[0_0px_40px_4px_rgba(0,255,255,1)]" : "hover:shadow-[0_0px_40px_1px_rgba(0,0,0,1)]"} ${LightMode ? "bg-dark" : "bg-white"} ${LightMode ? "text-white" : "text-gray-700"} relative rounded-xl`}>
+    <Card className={`border-0 w-[340px] h-[500px] m-auto transition duration-500 ease-in-out hover:scale-105 shadow-2xl ${LightMode ? "hover:shadow-[0_0px_22px_3px_rgba(0,255,255,1)]" : "hover:shadow-[0_0px_40px_1px_rgba(0,0,0,1)]"} ${LightMode ? "bg-dark" : "bg-white"} ${LightMode ? "text-white" : "text-gray-700"} relative rounded-xl`}>
 
       {/* Favorite Icon */}
       <FaRegHeart
-        style={{
-          position: 'absolute',
-          top: '10px',
-          right: '10px',
-          color: isFavorited ? '#ff0055' : '#262626',
-        }}
+        style={{ position: 'absolute', top: '10px', right: '10px', color: isFavorited ? '#ff0055' : '#262626' }}
         className='text-3xl m-3 cursor-pointer transition-transform duration-200 hover:scale-[1.2]'
         onClick={handleFavoriteClick}
       />

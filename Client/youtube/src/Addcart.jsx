@@ -8,36 +8,38 @@ import { Container } from '@mui/material';
 import { useCart } from './context/CartContext';
 import { Link, useNavigate } from 'react-router-dom';
 import { AiOutlineShoppingCart } from "react-icons/ai";
-import 'react-toastify/dist/ReactToastify.css';
-import { errorToast } from '../components/ErrorToast';
+import { ErrorToast } from '../components/ErrorToast';
 import { Toast } from '../components/SuccessToast';
+import DisableScrollRestoration from '../components/DisableScrollRestoration';
 
 export default function Basic() {
   const { setCartItems, user, setIsExploding, LightMode, setLengthCart } = useCart();
-  const [UserData, setUserData] = useState([]);
+  const [UserCard, setUserCard] = useState([]);
   const [cookies] = useCookies();
   const navigate = useNavigate()
+  const { _id, firstName, lastName, email, number, addcart } = user[0]
 
   // Calculate the cart totals
-  const subtotal = UserData.reduce((acc, item) => acc + item.price, 0);
+  const subtotal = UserCard.reduce((acc, item) => acc + item.price, 0);
   const GST = subtotal === 0 ? 0 : Math.floor((subtotal / 2) * 0.18); // Fixed GST cost
   const total = Math.floor((subtotal / 2) + GST);
 
+  DisableScrollRestoration()
   useEffect(() => {
     if (user && user[0]) {
-      setUserData(user[0].addcart || []);
+      setUserCard(addcart || []);
     }
   }, [user]);
 
   useEffect(() => {
-    setCartItems(UserData.length || 0);
-  }, [UserData, setCartItems]);
+    setCartItems(UserCard.length || 0);
+  }, [UserCard, setCartItems]);
 
   async function del(id) {
     try {
-      await axios.post(`http://localhost:3000/addcart/delete/${id}`, { cookies });
-      errorToast("Deleted", 1000)
-      setUserData(prevUserData => prevUserData.filter(d => d._id !== id));
+      await axios.post(`https://youtube-e-com-backend.onrender.com/addcart/delete/${id}`, { cookies });
+      ErrorToast('Deleted', 1200)
+      setUserCard(prevUserCard => prevUserCard.filter(d => d._id !== id));
     } catch (error) {
       console.error("Error deleting item:", error);
     }
@@ -47,7 +49,7 @@ export default function Basic() {
   async function handleRazorpayPayment() {
     try {
       // Step 1: Create an order on the server
-      const { data: order } = await axios.post("http://localhost:3000/create-order", { amount: total });
+      const { data: order } = await axios.post("https://youtube-e-com-backend.onrender.com/create-order", { amount: total });
       // Step 2: Configure Razorpay options
       const options = {
         key: "rzp_test_wh5dAj2ZhVsw97", // Replace with your actual key from env variable in production
@@ -60,27 +62,26 @@ export default function Basic() {
           // Step 3: Log order details after payment
           // On payment success
           try {
-            let userId = user[0]?._id;
-            const productIds = UserData.map(p => p._id);
+            const productIds = UserCard.map(({ _id }) => _id);
             // Log the details before sending the purchase request
-            await axios.post("http://localhost:3000/addcart/purchase", { data: productIds, id: userId, amount: total });
+            await axios.post("https://youtube-e-com-backend.onrender.com/addcart/purchase", { data: productIds, id: _id, amount: total });
             setLengthCart(productIds)
-            setUserData([]);
+            setUserCard([]);
             setCartItems(0)
-            setIsExploding((previous) => !previous)
+            setIsExploding((previousState) => !previousState)
             navigate('/mypurchase')
-            Toast("New Items Added🎉", 3500)
+            Toast("🥳New Items Added🎉", 3500)
             setTimeout(() => {
-              setIsExploding((p) => !p)
+              setIsExploding((previousState) => !previousState)
             }, 5000)
           } catch (error) {
             console.error("Error finalizing purchase:", error);
           }
         },
         prefill: {
-          name: `${user?.[0]?.firstName} ${user?.[0]?.lastName}`,
-          email: `${user?.[0]?.email}`,
-          contact: `${user?.[0]?.number}`,
+          name: `${firstName} ${lastName}`,
+          email: `${email}`,
+          contact: `${number}`,
         },
         theme: {
           color: "#3399cc",
@@ -93,9 +94,10 @@ export default function Basic() {
     }
   }
 
-  if (UserData.length === 0) {
+  if (UserCard.length === 0) {
     return (
       <section className="h-[550px] bg-[length:100%_100%] bg-no-repeat bg-center bg-[url('https://www.pngkey.com/png/detail/365-3654131_cart-empty-image-your-cart-is-empty.png')]">
+        <DisableScrollRestoration />
         <Container className="py-5">
           <div className="text-center my-40 align-items-center">
             <h5 className='text-red-500 text-7xl mb-5 font-bold d-flex justify-content-center font-mono'><AiOutlineShoppingCart />Your cart is empty now</h5>
@@ -109,10 +111,10 @@ export default function Basic() {
   }
 
   return (
-    <Container className="my-5">
+    <Container className="mt-4 mb-5">
       <MDBRow className="justify-content-center align-items-center">
         <MDBCol>
-          <MDBCard className={`shadow-2xl transition ease-in-out delay-300 ${LightMode ? "bg-gray-600" : "bg-white"} ${LightMode ? "text-white" : "text-dark"} ${LightMode && "hover:shadow-[0_0px_40px_5px_rgba(220,255,0,0.9)]"}`}>
+          <MDBCard className={`shadow-2xl transition ease-in-out delay-300 ${LightMode ? "bg-gray-600" : "bg-white"} ${LightMode ? "text-white" : "text-dark"} ${LightMode && "hover:shadow-[0_0px_22px_2px_rgba(220,255,0,0.9)]"}`}>
             <MDBCardBody className="px-4">
               <MDBRow>
                 <MDBCol lg="7">
@@ -125,34 +127,28 @@ export default function Basic() {
                   <div className="d-flex justify-content-between align-items-center mb-4">
                     <div>
                       <p className="my-2 text-xl font-bold">Shopping cart</p>
-                      <p className="text-xl font-mono">You have <span className='font-extrabold text-red-500 text-2xl'>{UserData.length}</span> items in your cart :</p>
+                      <p className="text-xl font-mono">You have <span className='font-extrabold text-red-500 text-2xl'>{UserCard.length}</span> items in your cart :</p>
                     </div>
                   </div>
-                  {UserData.map(d => (
-                    <MDBCard className="mb-3 transition ease-in-out hover:scale-[1.02]" key={d._id}>
+                  {UserCard.map(({ _id, img, title, price }) => (
+                    <MDBCard className="mb-3 transition ease-in-out hover:scale-[1.02]" key={_id}>
                       <MDBCardBody className={`border-1 ${LightMode ? "bg-gray-800" : "bg-light"} text-${LightMode ? "white" : "dark"}`}>
                         <div className="d-flex justify-content-between">
                           <div className="d-flex flex-row align-items-center">
-                            <MDBCardImage
-                              src={d.img}
-                              fluid
-                              className="rounded-3"
-                              style={{ width: "75px", height: "60px" }}
-                              alt={d.title}
-                            />
+                            <MDBCardImage src={img} fluid className="rounded-3" style={{ width: "75px", height: "60px" }} alt={title} />
                             <div className="ms-3">
                               <MDBTypography tag="h5">
-                                <b>{d.title}</b>
+                                <b>{title}</b>
                               </MDBTypography>
                             </div>
                           </div>
                           <div className="d-flex flex-row align-items-center">
                             <div style={{ width: "80px" }}>
                               <MDBTypography tag="h5" className="mb-0">
-                                <i><span className='text-red-500 font-semibold'>₹{Math.floor(d.price / 2).toLocaleString('en-IN')}</span><br /><span className='line-through'>₹{Math.floor(d.price).toLocaleString('en-IN')}</span></i>
+                                <i><span className='text-red-500 font-semibold'>₹{Math.floor(price / 2).toLocaleString('en-IN')}</span><br /><span className='line-through'>₹{Math.floor(price).toLocaleString('en-IN')}</span></i>
                               </MDBTypography>
                             </div>
-                            <MDBIcon fas icon="trash-alt" className='py-1 px-2 border-0 rounded text-slate-50 bg-slate-900 transition ease-in-out cursor-pointer text-xl hover:bg-red-600 hover:scale-110 hover:showdow-2xl' onClick={() => del(d._id)} />
+                            <MDBIcon fas icon="trash-alt" className='py-1 px-2 border-0 rounded text-slate-50 bg-slate-900 transition ease-in-out cursor-pointer text-xl hover:bg-red-600 hover:scale-110 hover:showdow-2xl' onClick={() => del(_id)} />
                           </div>
                         </div>
                       </MDBCardBody>
@@ -171,10 +167,10 @@ export default function Basic() {
                         <p className="mb-4 flex justify-between">Items :</p>
                         <p className="mb-4 flex justify-between">Prices :</p>
                       </div>
-                      {UserData?.map((d,id) => (
-                        <div key={id} className="d-flex justify-content-between mb-2 text-xl">
-                          <p className="mb-4 flex justify-between">- {d.title}</p>
-                          <p className="mb-4 flex justify-between">₹{Math.floor(d.price / 2).toLocaleString('en-IN')}</p>
+                      {UserCard?.map(({ title, price }, index) => (
+                        <div key={index} className="d-flex justify-content-between mb-2 text-xl">
+                          <p className="mb-4 flex justify-between">- {title}</p>
+                          <p className="mb-4 flex justify-between">₹{Math.floor(price / 2).toLocaleString('en-IN')}</p>
                         </div>
                       ))}
                       <hr />

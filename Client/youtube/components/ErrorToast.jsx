@@ -1,6 +1,6 @@
 import { toast } from "react-toastify";
 
-export function errorToast(msg, sec) {
+export function ErrorToast(msg, sec) {
   return (
     toast.error(msg, {
       position: 'top-center',

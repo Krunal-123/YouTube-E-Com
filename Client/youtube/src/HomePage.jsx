@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
 import { useCookies } from 'react-cookie';
-import { Outlet, useNavigate } from 'react-router-dom';
-import "../src/App.css"
-import { CartProvider } from '../src/context/CartContext.jsx'
+import { useNavigate } from 'react-router-dom';
+import { CartProvider } from './context/CartContext.jsx'
 import ExtraCompo from './ExtraCompo.jsx';
+import "../src/App.css"
 
 
 export default function () {

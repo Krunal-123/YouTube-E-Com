@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
 import { FaMapMarkerAlt, FaPhone, FaEnvelope } from 'react-icons/fa';
-import { Toast } from '../components/SuccessToast';
 import axios from 'axios';
-import { errorToast } from '../components/ErrorToast';
 import { useCart } from './context/CartContext';
+import DisableScrollRestoration from '../components/DisableScrollRestoration';
+import { Toast } from '../components/SuccessToast';
+import { ErrorToast } from '../components/ErrorToast';
 
 function ContactUs() {
   const { LightMode, user } = useCart()
   const [bool, setBool] = useState(false)
-
+  DisableScrollRestoration()
   // function
   async function handleSubmit(e) {
     e.preventDefault()
@@ -24,18 +25,19 @@ function ContactUs() {
     }
     // Front-end validation for phone number length
     if (optional.value.length !== 10) {
-      errorToast('Invalid phone number! Please Enter the 10-digit!', 4000);
+      ErrorToast('Invalid phone number! Please Enter the 10-digit!', 4000)
       return;
     }
 
     try {
-      await axios.post("http://localhost:3000/usersdetails", { ...data })
-      setBool(p => !p)
+      await axios.post("https://youtube-e-com-backend.onrender.com/usersdetails", { ...data })
       Toast("Submitted", 1000)
+      setBool(previousState => !previousState)
       optional.value = ''
       Subject.value = ''
       Message.value = ''
     } catch (error) {
+      setBool(previousState => !previousState)
       console.log(error);
     }
   }

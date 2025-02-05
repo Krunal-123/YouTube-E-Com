@@ -2,6 +2,8 @@ import axios from 'axios';
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { useCookies } from 'react-cookie';
 import { useNavigate } from 'react-router-dom';
+import ShimmerHeader from '../../ShimmerEffect/ShimmerHeader'
+import ShimmerContent from '../../ShimmerEffect/ShimmerContent'
 
 // Create the Cart context
 const CartContext = createContext();
@@ -29,13 +31,15 @@ export const CartProvider = ({ children }) => {
 
   const [cookies, setCookie, removeCookie] = useCookies(['token']);
 
-  // user[0]?.myfavourite.length
+  const [loading, setLoading] = useState(true);
+  // sorting update here
+  const [sort, setSort] = useState("Default")
+
   // Fetch services and user data
   const fetchData = async () => {
     try {
       // Fetch services data
-      const { data: servicesData } = await axios.post("http://localhost:3000/services");
-      // console.log(servicesData);
+      const { data: servicesData } = await axios.post("https://youtube-e-com-backend.onrender.com/services");
       let Status = [...servicesData].slice(0, 3).map(p => ({ ...p, status: "New", color: "primary" }))
       let Status2 = [...servicesData].slice(3, 6).map(p => ({ ...p, status: "Trending🔥", color: "warning" }))
       servicesData.splice(0, 6, ...Status.concat(Status2))
@@ -43,13 +47,14 @@ export const CartProvider = ({ children }) => {
 
       // Check if cookies and token are defined before making API requests
       if (cookies && cookies.token != undefined) {
-        const userResponse = await axios.post("http://localhost:3000/addcart/user", { cookies });
-        // Ensure that userResponse and its properties are defined before accessing them
-        if (userResponse.data && userResponse.data[0] && userResponse.data[0].addcart) {
-          setUser(userResponse.data);
-          setFav(userResponse.data[0].myfavourites.length);
-          setCartItems(userResponse.data[0].addcart.length);
-          // setLength(userResponse[0].myitems.length)
+        const userDetails = await axios.post("https://youtube-e-com-backend.onrender.com/addcart/user", { cookies });
+        const { myfavourites, addcart, lightMode } = userDetails.data[0]
+        // Ensure that userDetails and its properties are defined before accessing them
+        if (userDetails.data[0]) {
+          setUser(userDetails.data);
+          setFav(myfavourites.length);
+          setCartItems(addcart.length);
+          setLightMode(lightMode)
         }
       } else {
         Navigate("/login")
@@ -57,18 +62,31 @@ export const CartProvider = ({ children }) => {
     } catch (error) {
       console.error("Error fetching data:", error);
       // Additional error handling can be implemented here if needed
+    } finally {
+      setLoading(false);
     }
   };
 
+  async function mode() {
+    await axios.post("https://youtube-e-com-backend.onrender.com/light", { email: user?.[0].email, mode: LightMode })
+  }
+  useEffect(() => {
+    mode()
+  }, [LightMode])
+
   useEffect(() => {
     fetchData();
-    console.log("check");
   }, [cookies, cartItems, fav, add]); // Removed cartItems from dependency to avoid infinite loop
 
   return (
-    <CartContext.Provider value={{ cartItems, setCartItems, services, setServices, user, setUser, cookies, removeCookie, fav, setFav, open, setOpen, setAdd, isExploding, setIsExploding, LightMode, setLightMode, LengthCart, setLengthCart }}>
-      {children}
-    </CartContext.Provider>
+    <CartContext.Provider value={{ cartItems, setCartItems, services, setServices, user, setUser, cookies, removeCookie, fav, setFav, open, setOpen, setAdd, isExploding, setIsExploding, LightMode, setLightMode, LengthCart, setLengthCart, sort, setSort }}>
+      {loading ?
+        <>
+          <ShimmerHeader />
+          <ShimmerContent />
+        </>
+        : children}
+    </CartContext.Provider >
   );
 };
 

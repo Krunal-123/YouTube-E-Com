@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { TextField, Button, Box, Typography, Rating, Card, CardContent } from '@mui/material';
 import { useCart } from './context/CartContext';
 import axios from 'axios';
-import { toast } from 'react-toastify';
 import { Toast } from '../components/SuccessToast';
 
 export default function WriteReviewPage({ id }) {
@@ -33,7 +32,7 @@ export default function WriteReviewPage({ id }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     // Here you can send the data to a backend or display it in the app.
-    await axios.post("http://localhost:3000/review", { reviewData }).then((r) => {
+    await axios.post("https://youtube-e-com-backend.onrender.com/review", { reviewData }).then((r) => {
       setOpen(false)
       Toast('Review Submitted', 1000)
       setAdd(p => p + 1)
@@ -48,34 +47,11 @@ export default function WriteReviewPage({ id }) {
         Write a Review
       </Typography>
       <form onSubmit={handleSubmit}>
-        <TextField
-          fullWidth
-          label="Your Name (Read only)"
-          name="name"
-          value={reviewData.name}
-          onChange={handleInputChange}
-          margin="normal"
-          disabled
-        />
-        <TextField
-          fullWidth
-          label="Your Review"
-          name="review"
-          value={reviewData.review}
-          onChange={handleInputChange}
-          margin="normal"
-          required
-          multiline
-          rows={4}
-        />
+        <TextField fullWidth label="Your Name (Read only)" name="name" value={reviewData.name} onChange={handleInputChange} margin="normal" disabled />
+        <TextField fullWidth label="Your Review" name="review" value={reviewData.review} onChange={handleInputChange} margin="normal" required multiline rows={4} />
         <Box marginY={2}>
           <Typography component="legend">Rating</Typography>
-          <Rating
-            name="rating"
-            value={reviewData.rating}
-            onChange={handleRatingChange}
-            size='large'
-          />
+          <Rating name="rating" value={reviewData.rating} onChange={handleRatingChange} size='large' />
           <Typography component="legend">Out of 5</Typography>
         </Box>
         <Button variant="contained" color="primary" type="submit">

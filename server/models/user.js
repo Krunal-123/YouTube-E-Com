@@ -49,9 +49,16 @@ const userSchema = new mongoose.Schema({
         }
     }]
     ,
-    newItems:{
-        type:[mongoose.Schema.Types.ObjectId],
-        ref:'cards'
+    newItems: {
+        type: [mongoose.Schema.Types.ObjectId],
+        ref: 'cards'
+    }
+    , lightMode: {
+        type: Boolean
+    }
+    , createdAt: {
+        type: Date,
+        default: Date.now
     }
 }
 )

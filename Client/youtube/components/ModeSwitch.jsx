@@ -3,7 +3,6 @@ import { styled } from '@mui/material/styles';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 import { useCart } from '../src/context/CartContext';
-import axios from 'axios';
 
 export default function CustomizedSwitches() {
   const { LightMode, setLightMode, user } = useCart()
@@ -67,15 +66,11 @@ export default function CustomizedSwitches() {
       },
     }));
   if (!user) {
-    return
-  }
-  const lightmode = async () => {
-    setLightMode((previous) => !previous)
-    // await axios.post("http://localhost:3000/light", {email:user[0].email,mode:LightMode})
+    return null;
   }
   return (
     <FormControlLabel checked={LightMode}
-      onClick={lightmode}
+      onClick={()=>setLightMode((previous) => !previous)}
       control={<MaterialUISwitch />}
     />
   );
