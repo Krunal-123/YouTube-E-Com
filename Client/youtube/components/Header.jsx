@@ -9,15 +9,41 @@ import { useCart } from '../src/context/CartContext'
 import axios from 'axios';
 import CustomizedSwitches from './ModeSwitch';
 import ShimmerHeader from '../ShimmerEffect/ShimmerHeader'
+import { useEffect } from 'react';
 
 export default function PrimarySearchAppBar() {
   const { cartItems, removeCookie, user, fav, setServices, LightMode } = useCart()
   const [custom, setCustom] = React.useState(false)
   const [ProfileHover, setProfileHover] = React.useState(false)
+  const { firstName, profilePic } = user[0]
   const menuId = 'primary-search-account-menu';
   let navigate = useNavigate()
+  const RefDiv = React.useRef(null)
+  const RefBTN1 = React.useRef(null)
+  const RefDiv2 = React.useRef(null)
+  const RefBTN2 = React.useRef(null)
+
+  function handleClick(e) {
+    if (RefDiv.current != e.target && RefBTN1.current != e.target) {
+      setProfileHover(false)
+    }
+  }
+  function handleClick2(e) {
+    if (RefDiv2.current != e.target && RefBTN2.current != e.target) {
+      setCustom(false)
+    }
+  }
+
+  useEffect(() => {
+    document.addEventListener('click', handleClick)
+    return () => document.removeEventListener('click', handleClick)
+  }, [])
+
+  useEffect(() => {
+    document.addEventListener('click', handleClick2)
+    return () => document.removeEventListener('click', handleClick2)
+  }, [])
   
-  const{firstName,profilePic}=user[0]
 
   const Categoires = async (categorise) => {
     const { data: servicesData } = await axios.post("https://youtube-e-com-backend.onrender.com/services", { categorise });
@@ -149,15 +175,22 @@ export default function PrimarySearchAppBar() {
               <div className="flex">
                 <div className='md:hidden'>
                   {/* PROFILE IMG APP */}
-                  <button
-                    onClick={() => setProfileHover((previous) => !previous)}
+                  <button ref={RefBTN1}
+                    onClick={(event) => {
+                      event.stopPropagation()
+                      setProfileHover((previous) => !previous)
+                      setCustom(false)
+                    }
+                    }
                   >
                     <img src={profilePic} className={`d-inline w-[35px] h-[35px] mb-2 rounded-full ${ProfileHover && "shadow-[0px_0px_10px_5px_rgba(210,255,0,1)]"}`} />
                   </button>
 
                   {/* Menu */}
                   <div
+                    ref={RefDiv}
                     className={`absolute z-50 right-[70px] top-[60px] bg-${LightMode ? "dark" : "white"} border border-gray-300 rounded-md shadow-lg ${ProfileHover ? 'block' : 'hidden'} border border-gray-300 rounded-md shadow-lg ${ProfileHover ? 'block' : 'hidden'}`}
+                    onClick={(event) => event.stopPropagation()}
                   >
                     <div className="py-2 px-2 block mx-2 bg-clip-text text-lg font-bold text-transparent bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500">Hi, {firstName.toUpperCase()}
                     </div>
@@ -203,16 +236,26 @@ export default function PrimarySearchAppBar() {
 
                   {/* Catogories  APP*/}
                   <button
-                    onClick={() => setCustom((previous) => !previous)}
+                    ref={RefBTN2}
+                    onClick={(event) => {
+                      event.stopPropagation()
+                      setCustom((previous) => !previous)
+                      setProfileHover(false)
+                    }
+                    }
                   >
                     <MoreIcon />
                   </button>
 
                   {/* Categories Menu APP*/}
                   <div
-                    className={`absolute z-50 mt-1 right-[0px] top-[50px] ${LightMode ? "text-white" : "text-dark"} ${LightMode ? "bg-dark" : "bg-white"} border border-gray-300 rounded-md shadow-lg ${custom ? 'block' : 'hidden'}`}
-                    onClick={() => setCustom(false)}
-                  >
+                    ref={RefDiv2}
+                    className={`absolute z-50 mt-1 right-[10px] top-[50px] ${LightMode ? "text-white" : "text-dark"} ${LightMode ? "bg-dark" : "bg-white"} border border-gray-300 rounded-md shadow-lg ${custom ? 'block' : 'hidden'}`}
+                    onClick={(event) => {
+                      event.stopPropagation()
+                      setCustom(false)
+                    }
+                  }>
                     <button className="py-2 px-2 block mx-2 bg-clip-text text-md font-bold hover:text-transparent bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500" onClick={() => Categoires("editing")}>Editing Services</button>
                     <button className="py-2 px-2 block mx-2 bg-clip-text text-md font-bold hover:text-transparent bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500" onClick={() => Categoires("SEO")}>SEO Services</button>
                     <button className="py-2 px-2 block mx-2 bg-clip-text text-md font-bold hover:text-transparent bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500" onClick={() => Categoires("production")}>Production Services</button>
@@ -221,6 +264,7 @@ export default function PrimarySearchAppBar() {
                     <button className="py-2 px-2 block mx-2 bg-clip-text text-md font-bold hover:text-transparent bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500" onClick={() => Categoires("scripting")}>Video Scripting</button>
                     <button className="py-2 px-2 block mx-2 bg-clip-text text-md font-bold hover:text-transparent bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500" onClick={() => Categoires("analytics")}>Analytics and Reporting</button>
                     <button className="py-2 px-2 block mx-2 bg-clip-text text-md font-bold hover:text-transparent bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500" onClick={() => Categoires("promotions")}>Social Media Promotions</button>
+                    <hr/>
                     <button className="py-2 px-2 block mx-2 bg-clip-text text-md font-bold hover:text-transparent bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500" onClick={() => Categoires("all")}>Explore All</button>
                   </div>
                 </div>

@@ -68,7 +68,7 @@ const OrderHistory = () => {
 
   return (
     <>
-      <Container className={`h-[75vh] mt-5 mb-3 px-5 shadow-xl rounded-4 pt-3 ${LightMode ? "bg-gray-900" : "bg-light"}`} maxWidth={'lg'}>
+      <Container className={`h-[75vh] mt-5 mb-3 px-5 shadow-xl rounded-4 pt-3 ${LightMode ? "bg-gray-900" : "bg-light"}`} maxWidth={window.outerWidth>768?'lg':'xl'}>
         <h2 className={`text-3xl text-center font-bold mb-2 text-${LightMode ? "white" : "dark"}`}>#Order History</h2>
         <div className='h-[80%] w-[100%] overflow-y-auto'>
           {[...orderhistory].reverse().map(({ id, amount, createdAt }, index) => (

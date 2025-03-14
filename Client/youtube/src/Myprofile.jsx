@@ -133,15 +133,18 @@ export default function PersonalProfile() {
                 </MDBCol>
                 <MDBCol md="8" className='py-5'>
                   <MDBCardBody className="px-5 pt-5 text-lg font-semibold">
-                    <MDBTypography tag="h6" className='flex justify-between'><span>Account ID: {editDetails._id}</span> {editDetails.createdAt && <span>createdAt: {new Date(editDetails.createdAt).toLocaleDateString()}</span>}</MDBTypography>
+                    <MDBTypography className='flex justify-between text-xl max-md:text-sm'>
+                      <span><span className='text-gray-300'>Account ID:</span> <i>{editDetails._id}</i></span> 
+                      <span><span className='text-gray-300'>createdAt:</span> {new Date(editDetails?.createdAt).toLocaleDateString()}</span>
+                    </MDBTypography>
                     <hr className="mt-2 mb-4" />
                     <MDBRow className="pt-1">
-                      <MDBCol size="6" className="mb-3">
-                        <MDBTypography tag="h6">Email:</MDBTypography>
+                      <MDBCol size="6" className="mb-3 max-md:text-sm text-xl">
+                        <MDBTypography tag="h6" className='text-gray-300'>Email:</MDBTypography>
                         <MDBCardText>{editDetails.email}</MDBCardText>
                       </MDBCol>
-                      <MDBCol size="6" className="mb-3">
-                        <MDBTypography tag="h6">Name:</MDBTypography>
+                      <MDBCol size="6" className="mb-3 max-md:text-sm text-xl">
+                        <MDBTypography tag="h6" className='text-gray-300 max-md:text-sm text-xl'>Name:</MDBTypography>
                         {isEditing ? (
                           <>
                             <MDBInput
@@ -162,15 +165,12 @@ export default function PersonalProfile() {
                         )}
                       </MDBCol>
                     </MDBRow>
-
-                    <MDBTypography tag="h6">Information</MDBTypography>
                     <hr className="mt-3 mb-4" />
                     <MDBRow className="pt-1">
-
                       {isEditing ? (
                         <>
-                          <MDBCol size="6" className="mb-3">
-                            <MDBTypography tag="h6">Gender:</MDBTypography>
+                          <MDBCol size="6" className="mb-3 max-md:text-sm text-xl">
+                            <MDBTypography tag="h6" className='text-gray-300'>Gender:</MDBTypography>
                             <Select
                               name='gender'
                               value={editDetails.gender}
@@ -187,7 +187,7 @@ export default function PersonalProfile() {
                           </MDBCol>
 
                           <MDBCol size="6" className="mb-3">
-                            <MDBTypography tag="h6">Select Avatar:</MDBTypography>
+                            <MDBTypography tag="h6" className='text-gray-300'>Select Avatar:</MDBTypography>
                             <Select
                               name='profilePic'
                               value={selectedAvatar}
@@ -208,14 +208,14 @@ export default function PersonalProfile() {
                         </>
                       ) : (
                         <MDBCol>
-                          <MDBTypography tag="h6">Gender:</MDBTypography>
+                          <MDBTypography tag="h6" className='text-gray-300'>Gender:</MDBTypography>
                           <MDBCardText>{editDetails.gender}</MDBCardText>
                         </MDBCol>
 
                       )}
 
-                      <MDBCol size="6" className="mb-3">
-                        <MDBTypography tag="h6">Phone:</MDBTypography>
+                      <MDBCol size="6" className="mb-3 max-md:text-lg text-xl">
+                        <MDBTypography tag="h6" className='text-gray-300'>Phone:</MDBTypography>
                         {isEditing ? (
                           <MDBInput
                             name="number"
@@ -223,7 +223,7 @@ export default function PersonalProfile() {
                             onChange={handleInputChange}
                           />
                         ) : (
-                          <MDBCardText>{editDetails.number || 'N/A'}</MDBCardText>
+                          <MDBCardText><i className='font-mono'>{editDetails.number || 'N/A'}</i></MDBCardText>
                         )}
                       </MDBCol>
                     </MDBRow>

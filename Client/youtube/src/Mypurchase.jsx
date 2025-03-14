@@ -12,7 +12,8 @@ function GridExample() {
   const [showModal, setShowModal] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
   const { myitems } = user[0]
-  
+  const Devicewidth = window.outerWidth
+
   DisableScrollRestoration()
   const handleShowModal = (item) => {
     setSelectedItem(item);
@@ -24,9 +25,7 @@ function GridExample() {
     setSelectedItem(null);
   };
 
-  if (!services) {
-    return
-  }
+  if (!services) return
 
   if (!user || user[0].myitems == 0) {
     return (
@@ -46,17 +45,17 @@ function GridExample() {
   }
 
   return (
-    <Container className='my-10' maxWidth="xl">
+    <Container className='my-10 overflow-x-hidden' maxWidth="xl">
       <div className='flex justify-around'>
-        {isExploding && <ConfettiExplosion force={1} duration={4500} particleCount={400} width={2000} />}
-        {isExploding && <ConfettiExplosion force={1} duration={4500} particleCount={400} width={2000} />}
+        {isExploding && <ConfettiExplosion force={1} duration={4500} particleCount={150} width={Devicewidth} />}
+        {Devicewidth > 768 && isExploding && <ConfettiExplosion force={1} duration={4500} particleCount={150} width={Devicewidth} />}
       </div>
       <h2 className={`text-center text-5xl font-bold mb-5 font-serif text-${LightMode ? "white" : "dark"}`}>My Purchase Items:- ({user[0].myitems.length})</h2>
-      <Row xl={4} className="g-5">
+      <Row xl={4} className="g-3">
         {[...myitems].reverse().map(({ _id, img, title, description, content }, idx) => (
-          <Col key={idx}>
+          <Col key={idx} className='mt-5'>
             <Card className={`border-0 h-[450px] w-[300px] m-auto overflow-hidden rounded-xl shadow-2xl transition ease-in-out duration-500 hover:-translate-y-3 ${LightMode ? "hover:shadow-[0px_14px_25px_4px_rgba(205,0,255,1)]" : " hover:shadow-[0_0px_40px_1px_rgba(0,0,0,1)]"} ${LightMode ? "bg-dark" : "bg-white"} ${LightMode ? "text-white" : "text-gray-700"}`} >
-              {LengthCart.some((ele) => ele == _id) && <Badge bg={"primary"} className='z-10 absolute top-[-3px] left-[-4x] text-sm font-extrabold'>NEW</Badge>}
+              {LengthCart.some((ele) => ele == _id) && <Badge bg={"primary"} className='z-10 absolute top-[-3px] left-[-4px] text-sm font-extrabold'>NEW</Badge>}
               {<Badge bg={"warning"} className='absolute top-[-3px] right-[-3px] text-sm font-extrabold'>{idx + 1}</Badge>}
               <Card.Img variant="top" src={`${img}`} className='h-[250px]' />
               <Card.Body>

@@ -3,7 +3,7 @@ import { useCart } from "../src/context/CartContext"
 export default function () {
     const { LightMode } = useCart()
     return (
-        <footer className={`px-3 pt-4 lg:px-9 border-t-2 max-md:mb-20 ${LightMode ? "bg-dark text-white" : "bg-gray-100 text-dark"}`}>
+        <footer className={`px-3 pt-4 lg:px-9 border-t-2 max-md:mb-16 ${LightMode ? "bg-dark text-white" : "bg-gray-100 text-dark"}`}>
             <div className="grid gap-10 row-gap-6 mb-8 sm:grid-cols-2 lg:grid-cols-4">
 
                 <div className="sm:col-span-2">
